@@ -1,0 +1,5 @@
+{
+  "name": "ExamTrend AI",
+  "description": "An AI-powered trend analysis tool that scans historical exam papers to predict topic probabilities and analyze question patterns.",
+  "requestFramePermissions": []
+}
