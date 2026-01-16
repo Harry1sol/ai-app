@@ -5,7 +5,7 @@ import { AnalysisTable } from './components/AnalysisTable';
 import { ProbabilityCard } from './components/ProbabilityCard';
 import { SourceList } from './components/SourceList';
 import { SavedAnalysesList } from './components/SavedAnalysesList';
-import { generateAnalysis } from './services/geminiService';
+import { generateAnalysis } from './services/apiClient';
 import { AnalysisResult, SearchParams, SavedAnalysis } from './types';
 import { Sparkles, Brain, AlertTriangle, Save, CheckCircle, BarChart3 } from 'lucide-react';
 
@@ -49,8 +49,9 @@ const App: React.FC = () => {
       const data = await generateAnalysis(searchParams);
       setResult(data);
       setShowSaveSuccess(false); // Reset save state
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -132,7 +133,7 @@ const App: React.FC = () => {
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Next Exam Question</span>
                   </h2>
                   <p className="text-slate-500 text-lg leading-relaxed max-w-lg mx-auto">
-                      AI-driven analysis of 7+ years of historical data to identify high-probability topics.
+                      Real analysis of 660+ UPSC papers, 170+ CBSE papers, and JEE Main archives to predict exam trends.
                   </p>
                </div>
              )}
