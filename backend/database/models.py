@@ -55,7 +55,7 @@ class Question(Base):
     marks = Column(Integer, default=1)
     difficulty = Column(String(20))
     topics = Column(Text)  # JSON string
-    metadata = Column(Text)  # JSON string
+    question_metadata = Column(Text)  # JSON string (renamed from 'metadata' to avoid SQLAlchemy conflict)
     extracted_at = Column(DateTime, default=func.now())
 
 
