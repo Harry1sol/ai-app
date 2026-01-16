@@ -5,6 +5,7 @@ import { AnalysisTable } from './components/AnalysisTable';
 import { ProbabilityCard } from './components/ProbabilityCard';
 import { SourceList } from './components/SourceList';
 import { SavedAnalysesList } from './components/SavedAnalysesList';
+import { SkeletonDashboard } from './components/SkeletonDashboard';
 import { generateAnalysis } from './services/geminiService';
 import { AnalysisResult, SearchParams, SavedAnalysis } from './types';
 import { Sparkles, Brain, AlertTriangle, Save, CheckCircle, BarChart3 } from 'lucide-react';
@@ -44,6 +45,8 @@ const App: React.FC = () => {
     setLoading(true);
     setError(null);
     setParams(searchParams);
+    // Clear previous result to show skeleton if researching
+    setResult(null); 
     
     try {
       const data = await generateAnalysis(searchParams);
@@ -125,7 +128,7 @@ const App: React.FC = () => {
         
         {/* Input Section */}
         <div className="flex flex-col items-center">
-             {!result && (
+             {!result && !loading && (
                <div className="text-center mb-10 max-w-2xl animate-fade-in pt-8">
                   <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight leading-tight">
                       Predict Your <br className="hidden md:block"/>
@@ -140,13 +143,16 @@ const App: React.FC = () => {
              <InputSection onAnalyze={handleAnalyze} isLoading={loading} />
         </div>
 
-        {/* Saved Analyses List (Only show if no result is active to keep UI clean) */}
+        {/* Loading Skeleton */}
+        {loading && <SkeletonDashboard />}
+
+        {/* Saved Analyses List (Only show if no result is active and not loading) */}
         {!loading && savedAnalyses.length > 0 && !result && (
            <SavedAnalysesList items={savedAnalyses} onLoad={handleLoad} onDelete={handleDelete} />
         )}
 
         {/* Error Message */}
-        {error && (
+        {error && !loading && (
             <div className="max-w-4xl mx-auto mb-8 p-4 bg-red-50 border border-red-100 rounded-xl flex items-center gap-3 text-red-600 shadow-sm animate-fade-in">
                 <AlertTriangle className="w-5 h-5 shrink-0" />
                 <span className="text-sm font-medium">{error}</span>
@@ -154,7 +160,7 @@ const App: React.FC = () => {
         )}
 
         {/* Results Dashboard */}
-        {result && params && (
+        {!loading && result && params && (
           <div className="animate-fade-in space-y-6">
             
             {/* Result Header & Actions */}

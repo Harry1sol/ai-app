@@ -1,3 +1,4 @@
+
 export interface SearchParams {
   exam: string;
   level: string;
@@ -44,4 +45,24 @@ export interface SavedAnalysis {
   timestamp: number;
   params: SearchParams;
   result: AnalysisResult;
+}
+
+// Taxonomy Types for Dropdowns
+export interface TaxonomyItem {
+  id: string;
+  label: string;
+}
+
+export interface ChapterOption extends TaxonomyItem {}
+
+export interface SubjectOption extends TaxonomyItem {
+  chapters: ChapterOption[];
+}
+
+export interface LevelOption extends TaxonomyItem {
+  subjects: SubjectOption[];
+}
+
+export interface ExamOption extends TaxonomyItem {
+  levels: LevelOption[];
 }
